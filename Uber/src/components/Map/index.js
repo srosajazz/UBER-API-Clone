@@ -15,8 +15,8 @@ export default class Map extends Component {
       ({ coords: { latitude, longitude } }) => {
         this.setState({
           region: {
-            latitude,
-            longitude,
+            latitude: 42.3471477,
+            longitude: -71.0847017,
             latitudeDelta: 0.0143,
             longitudeDelta: 0.0134
           }
@@ -53,12 +53,15 @@ export default class Map extends Component {
           region={region}
           showsUserLocation
           loadingEnabled
+          ref={el => (this.mapView = el)}
         >
           {destination && (
             <Directions
               origin={region}
               destination={destination}
-              onReady={() => {}}
+              onReady={result => {
+                this.mapView.fitToCoordinates(result.coordinates);
+              }}
             />
           )}
         </MapView>
