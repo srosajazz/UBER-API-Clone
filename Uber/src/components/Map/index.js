@@ -5,6 +5,7 @@ import { getPixelSize } from "../../utils";
 
 import Search from "../Search";
 import Directions from "../Directions";
+import Geocoder from "react-native-geocoding";
 
 import markerImage from "../../assets/marker.png";
 import {
@@ -16,19 +17,30 @@ import {
   LocationTimeTextSmall
 } from "./styles";
 
+Geocoder.init("AIzaSyDfgoOA0qlb-UgTU-wMvcQqGKDZaO5EsXM");
+
 export default class Map extends Component {
   state = {
     region: null,
-    destination: null
+    destination: null,
+    duration: null,
+    location: null
   };
 
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
+      async ({ coords: { latitude, longitude } }) => {
+        const response = await Geocoder.from({ latitude, longitude });
+        const address = response.results[0].formatted_address;
+        const location = address.substring(0, address.indexOf(","));
+
+        console.log(address);
+
         this.setState({
+          location,
           region: {
-            latitude: 42.3601,
-            longitude: -71.0589,
+            latitude,
+            longitude,
             latitudeDelta: 0.0143,
             longitudeDelta: 0.0134
           }
@@ -57,7 +69,7 @@ export default class Map extends Component {
     });
   };
   render() {
-    const { region, destination } = this.state;
+    const { region, destination, duration, location } = this.state;
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -73,6 +85,8 @@ export default class Map extends Component {
                 origin={region}
                 destination={destination}
                 onReady={result => {
+                  this.setState({ duration: Math.floor(result.duration) });
+
                   this.mapView.fitToCoordinates(result.coordinates, {
                     edgePadding: {
                       right: getPixelSize(50),
@@ -96,10 +110,10 @@ export default class Map extends Component {
               <Marker coordinate={region} anchor={{ x: 0, y: 0 }}>
                 <LocationBox>
                   <LocationTimeBox>
-                    <LocationTimeText>31</LocationTimeText>
-                    <LocationTimeText>MIN</LocationTimeText>
+                    <LocationTimeText>{duration}</LocationTimeText>
+                    <LocationTimeTextSmall>MIN</LocationTimeTextSmall>
                   </LocationTimeBox>
-                  <LocationTimeTextSmall>Main Street</LocationTimeTextSmall>
+                  <LocationText>{location}</LocationText>
                 </LocationBox>
               </Marker>
             </Fragment>
