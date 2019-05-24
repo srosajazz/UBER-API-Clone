@@ -7,7 +7,14 @@ import Search from "../Search";
 import Directions from "../Directions";
 
 import markerImage from "../../assets/marker.png";
-import { LocationBox, LocationText } from "./styles";
+import {
+  Back,
+  LocationBox,
+  LocationText,
+  LocationTimeBox,
+  LocationTimeText,
+  LocationTimeTextSmall
+} from "./styles";
 
 export default class Map extends Component {
   state = {
@@ -20,8 +27,8 @@ export default class Map extends Component {
       ({ coords: { latitude, longitude } }) => {
         this.setState({
           region: {
-            latitude: 42.3471477,
-            longitude: -71.0847017,
+            latitude: 42.3601,
+            longitude: -71.0589,
             latitudeDelta: 0.0143,
             longitudeDelta: 0.0134
           }
@@ -85,9 +92,20 @@ export default class Map extends Component {
                   <LocationText>{destination.title}</LocationText>
                 </LocationBox>
               </Marker>
+
+              <Marker coordinate={region} anchor={{ x: 0, y: 0 }}>
+                <LocationBox>
+                  <LocationTimeBox>
+                    <LocationTimeText>31</LocationTimeText>
+                    <LocationTimeText>MIN</LocationTimeText>
+                  </LocationTimeBox>
+                  <LocationTimeTextSmall>Main Street</LocationTimeTextSmall>
+                </LocationBox>
+              </Marker>
             </Fragment>
           )}
         </MapView>
+
         <Search onLocationSelected={this.handleLocationSelected} />
       </View>
     );
