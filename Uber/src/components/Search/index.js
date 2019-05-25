@@ -50,7 +50,7 @@ export default class Search extends Component {
           textInput: {
             height: 54,
             margin: 0,
-            borderRadius: 0,
+            borderRadius: 25,
             paddingTop: 0,
             paddingBottom: 0,
             paddingLeft: 20,
