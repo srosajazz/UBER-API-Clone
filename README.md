@@ -1,6 +1,6 @@
 # Developed an React Native App from scratch by recreating the UBER interface.
 
-## URL da API 
+## URL of API 
 https://github.com/srosajazz/UBER-API-Clone
 
 
